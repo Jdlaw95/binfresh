@@ -1,3 +1,8 @@
+#!/bin/bash
+
+echo "🎨 Fixing logo placement..."
+
+cat > app/page.tsx << 'EOF'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -139,3 +144,10 @@ export default function Home() {
     </main>
   )
 }
+EOF
+
+echo "✅ Done. Restart: npm run dev"
+echo ""
+echo "⚠️  The nav logo white box is because the PNG has a white background."
+echo "    Go to remove.bg, upload binfreshlogo.png, download the transparent version,"
+echo "    rename it binfreshlogo.png and replace it in your public/ folder."

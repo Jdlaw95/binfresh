@@ -4,8 +4,10 @@ import { resend, FROM_EMAIL } from '@/lib/resend'
 import { createClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   try {
+    const { id } = await context.params
+
     const cookieStore = await cookies()
     const accessToken = cookieStore.get('sb-access-token')?.value
     const refreshToken = cookieStore.get('sb-refresh-token')?.value
@@ -34,10 +36,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
     }
 
-    const { data: booking, error } = await supabaseAdmin
+    const { data: booking, error } = await getSupabaseAdmin()
       .from('bookings')
       .update({ status })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single()
 
